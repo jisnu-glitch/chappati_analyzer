@@ -1,0 +1,119 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+body {
+  background: linear-gradient(to right, #202020, #320d05, #202020);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  background: rgba(237, 213, 213, 0.05);
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+  margin-bottom: 20px;
+  font-size: 2rem;
+}
+
+input[type="file"] {
+  border: 2px dashed #17191d;
+  padding: 12px;
+  background: rgb(90, 91, 92);
+  border-radius: 10px;
+  color: white;
+  width: 100%;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+button {
+  background-color: rgb(90, 91, 92);
+  border: none;
+  padding: 12px 20px;
+  color: white;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+button:hover {
+  background-color: #202020;
+  transform: scale(1.05);
+}
+
+/*#output {
+  margin-top: 20px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  background: rgba(0,0,0,0.3);
+  padding: 12px;
+  border-left: 5px solid #10b981;
+  border-radius: 8px;
+}*/
+
+canvas {
+  margin-top: 20px;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+  max-width: 100%;
+}
+.custom-file-upload {
+  display: inline-block;
+  padding: 12px 20px;
+  background-color: rgb(90, 91, 92);
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  border: 2px solid transparent;
+  user-select: none;
+}
+
+.custom-file-upload:hover {
+  background-color: #202020;
+  transform: scale(1.05);
+  
+}
+
+.result-box {
+  background: linear-gradient(to right, #1f1f1f, #2c1b17);
+  color: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 0 12px rgba(0, 255, 180, 0.3);
+  text-align: center;
+}
+
+.progress-container {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  overflow: hidden;
+  height: 20px;
+  margin: 15px auto;
+  width: 80%;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(to right, #00ffae, #00d9ff);
+  border-radius: 20px;
+  transition: width 1s ease-in-out;
+}

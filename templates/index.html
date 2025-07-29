@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chapatti Roundness Checker</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Chapatti Roundness Analyzer 🫓</h1>
+    
+    <input type="file" id="imageInput" accept="image/*" hidden />
+<label for="imageInput" class="custom-file-upload">📂 Choose Chapatti Image</label>
+
+    <button onclick="analyze()">Check Roundness</button>
+    <div id="output"></div>
+    <canvas id="previewCanvas" width="300" height="300"></canvas>
+  </div>
+
+  <script>
+    function analyze() {
+      const input = document.getElementById('imageInput');
+      const file = input.files[0];
+      const output = document.getElementById('output');
+      const canvas = document.getElementById('previewCanvas');
+      const ctx = canvas.getContext('2d');
+
+      if (!file) {
+        output.innerHTML = "Please upload a chapatti photo 🫓";
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("image", file);
+
+      // Preview
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = new Image();
+        img.onload = function () {
+          canvas.width = 300;
+          canvas.height = 300;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+
+      fetch('/analyze', {
+        method: 'POST',
+        body: formData,
+      })
+      .then(res => res.json())
+      .then(data => {
+        output.innerHTML = `
+  <div class="result-box">
+    <p>🔵 <strong>Roundness:</strong> ${data.roundness}%</p>
+    <div class="progress-container">
+      <div class="progress-bar" style="width: ${data.roundness}%"></div>
+    </div>
+    <p>📝 <strong>${data.message}</strong> 🟢 Serve it hot!</p>
+  </div>
+`;
+
+      })
+      .catch(err => {
+        output.innerHTML = "Something went wrong. 🍽️";
+        console.error(err);
+      });
+    }
+  </script>
+</body>
+</html>
