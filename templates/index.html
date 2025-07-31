@@ -4,72 +4,165 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Chapatti Roundness Checker</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <h1>Chapatti Roundness Analyzer 🫓</h1>
+  <div class="main-container">
+    <div class="masked-text">
+    <div class="chappati-big">Chappati</div>
+    <div class="detector-small">Roundness Detector</div>
+    </div>
     
-    <input type="file" id="imageInput" accept="image/*" hidden />
-<label for="imageInput" class="custom-file-upload">📂 Choose Chapatti Image</label>
-
-    <button onclick="analyze()">Check Roundness</button>
-    <div id="output"></div>
-    <canvas id="previewCanvas" width="300" height="300"></canvas>
+      <div class="container">
+    
+    
+        <input type="file" id="imageInput" accept="image/*" hidden onchange="previewImage()" />
+      <label for="imageInput" class="custom-file-upload">📂 Choose Chapatti Image</label>
+        <button onclick="analyze()">Check Roundness</button>
+        <div id="output" style="font-size: medium ; color: rgb(40, 104, 109); padding: 20px;"></div>
+        <canvas id="previewCanvas" width="300" height="300"></canvas>
+      </div>
+    </div>
+    
   </div>
+
+  <div class="reset" style="margin-right: auto;"><button class="reset-btn" onclick="resetApp()">Reset</button></div>
+
 
   <script>
-    function analyze() {
-      const input = document.getElementById('imageInput');
-      const file = input.files[0];
-      const output = document.getElementById('output');
-      const canvas = document.getElementById('previewCanvas');
-      const ctx = canvas.getContext('2d');
+    function previewImage() {
+  const input = document.getElementById('imageInput');
+  const file = input.files[0];
+  const canvas = document.getElementById('previewCanvas');
+  const ctx = canvas.getContext('2d');
 
-      if (!file) {
-        output.innerHTML = "Please upload a chapatti photo 🫓";
-        return;
-      }
+  if (!file) return;
 
-      const formData = new FormData();
-      formData.append("image", file);
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const img = new Image();
+    img.onload = function () {
+      canvas.width = 300;
+      canvas.height = 300;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
 
-      // Preview
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const img = new Image();
-        img.onload = function () {
-          canvas.width = 300;
-          canvas.height = 300;
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
+//     function analyze() {
+//       const input = document.getElementById('imageInput');
+//       const file = input.files[0];
+//       const output = document.getElementById('output');
+//       const canvas = document.getElementById('previewCanvas');
+//       const ctx = canvas.getContext('2d');
 
-      fetch('/analyze', {
-        method: 'POST',
-        body: formData,
-      })
-      .then(res => res.json())
-      .then(data => {
-        output.innerHTML = `
-  <div class="result-box">
-    <p>🔵 <strong>Roundness:</strong> ${data.roundness}%</p>
-    <div class="progress-container">
-      <div class="progress-bar" style="width: ${data.roundness}%"></div>
-    </div>
-    <p>📝 <strong>${data.message}</strong> 🟢 Serve it hot!</p>
-  </div>
-`;
+//       if (!file) {
+//         output.innerHTML = "Please upload a chapatti photo 🫓";
+//         return;
+//       }
 
-      })
-      .catch(err => {
-        output.innerHTML = "Something went wrong. 🍽️";
-        console.error(err);
-      });
-    }
+//       const formData = new FormData();
+//       formData.append("image", file);
+
+//       // Preview
+//       const reader = new FileReader();
+//       reader.onload = function (e) {
+//         const img = new Image();
+//         img.onload = function () {
+//           canvas.width = 300;
+//           canvas.height = 300;
+//           ctx.clearRect(0, 0, canvas.width, canvas.height);
+//           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+//         };
+//         img.src = e.target.result;
+//       };
+//       reader.readAsDataURL(file);
+
+//       fetch('/analyze', {
+//         method: 'POST',
+//         body: formData,
+//       })
+//       .then(res => res.json())
+//       .then(data => {
+//         output.innerHTML = `
+//   <div class="result-box">
+//     <p>🔵 <strong>Roundness:</strong> ${data.roundness}%</p>
+//     <div class="progress-container">
+//       <div class="progress-bar" style="width: ${data.roundness}%"></div>
+//     </div>
+//     <p>📝 <strong>${data.message}</strong> </p>
+//   </div>
+// `;
+
+//       })
+//       .catch(err => {
+//         output.innerHTML = "Something went wrong. 🍽️";
+//         console.error(err);
+//       });
+//     }
+function analyze() {
+  const input = document.getElementById('imageInput');
+  const file = input.files[0];
+  const output = document.getElementById('output');
+
+  if (!file) {
+    output.innerHTML = "Please upload a chapatti photo 🫓";
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("image", file);
+
+  output.innerHTML = "🥣 Checking roundness...";
+
+  fetch('/analyze', {
+    method: 'POST',
+    body: formData,
+  })
+    .then(res => res.json())
+    .then(data => {
+      output.innerHTML = `
+        <div class="result-box">
+          <p>🔵 <strong>Roundness:</strong> ${data.roundness}%</p>
+          <div class="progress-container">
+            <div class="progress-bar" style="width: ${data.roundness}%"></div>
+          </div>
+          <p>📝 <strong>${data.message}</strong></p>
+        </div>
+      `;
+    })
+    .catch(err => {
+      output.innerHTML = "Something went wrong. 🍽️";
+      console.error(err);
+    });
+}
+
+function resetApp() {
+  // Clear file input
+  const input = document.getElementById('imageInput');
+  input.value = "";
+
+  // Clear canvas
+  const canvas = document.getElementById('previewCanvas');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Clear output/result
+  const output = document.getElementById('output');
+  output.innerHTML = "";
+
+  // Optional: Reset canvas size to default
+  canvas.width = 300;
+  canvas.height = 300;
+}
+
+
   </script>
 </body>
 </html>
