@@ -22,7 +22,7 @@
         <input type="file" id="imageInput" accept="image/*" hidden onchange="previewImage()" />
       <label for="imageInput" class="custom-file-upload">📂 Choose Chapatti Image</label>
         <button onclick="analyze()">Check Roundness</button>
-        <div id="output" style="font-size: medium ; color: rgb(40, 104, 109); padding: 20px;"></div>
+        <div id="output" style="font-size: medium ; color: rgb(40, 104, 109); padding: 20px; font-style: bold;"></div>
         <canvas id="previewCanvas" width="300" height="300"></canvas>
       </div>
     </div>
@@ -112,7 +112,7 @@ function analyze() {
   const output = document.getElementById('output');
 
   if (!file) {
-    output.innerHTML = "Please upload a chapatti photo 🫓";
+    output.innerHTML = "ആ എന്നിട്ട് എന്നിട്ട് .....?";
     return;
   }
 
